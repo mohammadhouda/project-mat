@@ -1,13 +1,11 @@
-
-import React, { useState } from 'react';
-import './AdminPage.css';
-import logo from './logo.png';
-
+import React, { useState } from "react";
+import "./AdminPage.css";
+import logo from "./logo2.png";
 
 const Header = () => (
   <header className="header">
     <img src={logo} alt="Company Logo" className="logo-admin" />
-    <h1 className='header-title'>Admin Dashboard</h1>
+    <h1 className="header-title">Admin Dashboard</h1>
   </header>
 );
 
@@ -18,14 +16,14 @@ const Footer = () => (
 );
 
 const UserAdminPage = () => {
-  const [users, setUsers] = useState(['User1', 'User2', 'User3']);
+  const [users, setUsers] = useState(["User1", "User2", "User3"]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    hourlyCost: 0
+    firstName: "",
+    lastName: "",
+    email: "",
+    hourlyCost: 0,
   });
 
   const addUser = () => {
@@ -34,7 +32,7 @@ const UserAdminPage = () => {
   };
 
   const deleteUser = () => {
-    setUsers(users.filter(user => user !== selectedUser));
+    setUsers(users.filter((user) => user !== selectedUser));
     setSelectedUser(null);
     setShowForm(false);
   };
@@ -46,21 +44,20 @@ const UserAdminPage = () => {
 
   const handleEditClick = (e) => {
     e.stopPropagation();
-    setShowForm(true); 
+    setShowForm(true);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
-   
+    console.log("Form Data:", formData);
   };
 
   return (
@@ -75,18 +72,24 @@ const UserAdminPage = () => {
                 <li
                   key={index}
                   onClick={() => handleUserClick(user)}
-                  className={selectedUser === user ? 'selected' : ''}
+                  className={selectedUser === user ? "selected" : ""}
                 >
                   <span>{user}</span>
                   {selectedUser === user && (
-                    <span className="edit-icon" onClick={handleEditClick}>✏️</span>
+                    <span className="edit-icon" onClick={handleEditClick}>
+                      ✏️
+                    </span>
                   )}
                 </li>
               ))}
             </ul>
             <div className="icon-container">
-              <button onClick={addUser} className="icon-button">+</button>
-              <button onClick={deleteUser} className="icon-button">-</button>
+              <button onClick={addUser} className="icon-button">
+                +
+              </button>
+              <button onClick={deleteUser} className="icon-button">
+                -
+              </button>
             </div>
           </div>
         </div>
@@ -138,7 +141,9 @@ const UserAdminPage = () => {
                   required
                 />
               </div>
-              <button type="submit" className="submit-button">Save</button>
+              <button type="submit" className="submit-button">
+                Save
+              </button>
             </form>
           )}
         </div>
