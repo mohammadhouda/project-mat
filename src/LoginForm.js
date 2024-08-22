@@ -2,17 +2,31 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
 import logo from './logo.png';
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = ({userType, setUserType}) => {
+  
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e)=>{
+    // check credentials from db here 
+
     e.preventDefault();
-    if (onLogin) {
-      onLogin(user, password);
+
+    if ((user === 'admin') && (password === 'admin')){
+        setUserType('admin');
+        navigate('/admin');
     }
-  };
+    else if ((user === 'user') && (password === 'user')){
+        setUserType('user');
+        navigate('/user');
+    }
+    else{
+        alert('invalid credentials');
+    }
+}
 
   return (
     <div className="login-container">
