@@ -33,6 +33,23 @@
     overflow-y: scroll;
     cursor: pointer;
   }
+ 
+  .box{
+    position: relative;
+    
+  }
+
+  .box::before{
+   position: absolute;
+   content: "No User";
+   font-size: large;
+   top: 50%;
+   right: 50%;
+   transform: translateX(50%);
+   color: #c7babae6;
+   font-weight: bold;
+   letter-spacing: 1px;
+  }
   
   .user-list-box h3 {
     margin-bottom: 10px;

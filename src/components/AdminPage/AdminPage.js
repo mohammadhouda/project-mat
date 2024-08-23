@@ -3,7 +3,7 @@ import "./AdminPage.css";
 import { Header, Footer } from "../../index";
 
 const UserAdminPage = () => {
-  const [users, setUsers] = useState(["User1", "User2", "User3"]);
+  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -17,6 +17,8 @@ const UserAdminPage = () => {
     const newUser = `User${users.length + 1}`;
     setUsers([...users, newUser]);
   };
+
+  const isThereUser = users.length === 0;
 
   const deleteUser = () => {
     setUsers(users.filter((user) => user !== selectedUser));
@@ -52,7 +54,7 @@ const UserAdminPage = () => {
       <Header />
       <div className="admin-content">
         <div className="sidebar">
-          <div className="user-list-box">
+          <div className={`user-list-box ${isThereUser ? "box" : ""}`}>
             <h3>Users</h3>
             <ul className="user-list">
               {users.map((user, index) => (
