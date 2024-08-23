@@ -1,9 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./components/index.css";
+import App from "./App";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <App title={'Im a web Developer'}/>
+export { default as LoginForm } from "./components/LoginForm/LoginForm";
+export { default as AdminPage } from "./components/AdminPage/AdminPage";
+export { default as UserPage } from "./components/UserPage/UserPage";
+export { default as Header } from "./components/Header/Header";
+export { default as Footer } from "./components/Footer/Footer";
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
 );
-

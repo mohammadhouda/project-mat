@@ -1,33 +1,25 @@
-import React, { Fragment, useState } from 'react';
-import './UserPage.css';
-// import logo from '../../assets/Images/logo.png';
-import TableRow from '../TableRow/TableRow';
-import {Header, Footer} from '../index'
-
-// const Header = () => (
-//   <header className="header">
-//     <img src={logo} alt="Company Logo" className="logo-admin" />
-//     <h1 className="header-title">Time Card Page</h1>
-//   </header>
-// );
+import React, { Fragment, useState } from "react";
+import "./UserPage.css";
+import TableRow from "../TableRow/TableRow";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 const UserPage = () => {
-  
   const projectTasks = {
-    'ICS': ['Portal 1', 'Engine 1', 'Auto 1'],
-    'CLNTS': ['Portal 2', 'Engine 2', 'Auto 2']
+    ICS: ["Portal 1", "Engine 1", "Auto 1"],
+    CLNTS: ["Portal 2", "Engine 2", "Auto 2"],
   };
-  
-  const [selectedProject, setSelectedProject] = useState('');
+
+  const [selectedProject, setSelectedProject] = useState("");
   const [availableTasks, setAvailableTasks] = useState([]);
-  const [selectedTask, setSelectedTask] = useState('');
+  const [selectedTask, setSelectedTask] = useState("");
   const [tableData, setTableData] = useState([]);
 
   const handleProjectChange = (event) => {
     const project = event.target.value;
     setSelectedProject(project);
     setAvailableTasks(projectTasks[project] || []);
-    setSelectedTask(''); // to clear selected task when project changes
+    setSelectedTask(""); // to clear selected task when project changes
   };
 
   const handleTaskChange = (event) => {
@@ -41,21 +33,21 @@ const UserPage = () => {
         {
           project: selectedProject,
           task: selectedTask,
-          monday: '',
-          tuesday: '',
-          wednesday: '',
-          thursday: '',
-          friday: '',
-          saturday: '',
-          sunday: '',
+          monday: "",
+          tuesday: "",
+          wednesday: "",
+          thursday: "",
+          friday: "",
+          saturday: "",
+          sunday: "",
         },
       ]);
 
-      setSelectedProject('');
+      setSelectedProject("");
       setAvailableTasks([]);
-      setSelectedTask('');
+      setSelectedTask("");
     } else {
-      alert('Please select both a project and a task');
+      alert("Please select both a project and a task");
     }
   };
 
@@ -67,12 +59,12 @@ const UserPage = () => {
 
   const handleSubmit = () => {
     if (tableData.length === 0) {
-      alert('The table is empty. Please add data before submitting.');
+      alert("The table is empty. Please add data before submitting.");
       return;
     }
 
-    console.log('Table Data:', tableData);
-    alert('Data submitted!');
+    console.log("Table Data:", tableData);
+    alert("Data submitted!");
   };
 
   return (
@@ -82,7 +74,9 @@ const UserPage = () => {
         <div className="dropdown">
           <label>Project</label>
           <select value={selectedProject} onChange={handleProjectChange}>
-            <option value="" disabled>Select a project</option>
+            <option value="" disabled>
+              Select a project
+            </option>
             {Object.keys(projectTasks).map((project, index) => (
               <option key={index} value={project}>
                 {project}
@@ -93,8 +87,14 @@ const UserPage = () => {
 
         <div className="dropdown">
           <label>Task</label>
-          <select value={selectedTask} onChange={handleTaskChange} disabled={!availableTasks.length}>
-            <option value="" disabled>Select a Task</option>
+          <select
+            value={selectedTask}
+            onChange={handleTaskChange}
+            disabled={!availableTasks.length}
+          >
+            <option value="" disabled>
+              Select a Task
+            </option>
             {availableTasks.map((task, index) => (
               <option key={index} value={task}>
                 {task}
@@ -103,7 +103,7 @@ const UserPage = () => {
           </select>
         </div>
 
-        <div className='button-container'>
+        <div className="button-container">
           <button onClick={handleAddClick}>Add</button>
         </div>
 
@@ -136,7 +136,9 @@ const UserPage = () => {
         </div>
 
         <div className="submit-container">
-          <button className="submit-button" onClick={handleSubmit}>Submit</button>
+          <button className="submit-button" onClick={handleSubmit}>
+            Submit
+          </button>
         </div>
       </div>
 

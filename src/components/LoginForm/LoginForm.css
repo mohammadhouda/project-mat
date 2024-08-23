@@ -16,6 +16,24 @@ body{
   background-color: #f4f4f4;
 }
 
+.message{
+  display: none;
+  background-color: rgba(255, 0, 0, 0.467);
+  border-radius: 5px;
+}
+
+.message p{
+  color: black;
+  padding: 7px 0px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.message.show {
+  display: block;
+}
+
+
 .login-form {
   background: white;
   padding: 20px;

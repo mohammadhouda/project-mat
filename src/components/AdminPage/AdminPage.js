@@ -1,20 +1,6 @@
 import React, { useState } from "react";
 import "./AdminPage.css";
-// import logo from "../../assets/Images/logo.png";
-import { Header, Footer } from "../index";
-
-// const Header = () => (
-//   <header className="header">
-//     <img src={logo} alt="Company Logo" className="logo-admin" />
-//     <h1 className="header-title">Admin Dashboard</h1>
-//   </header>
-// );
-
-// const Footer = () => (
-//   <footer className="footer">
-//     <p>© 2024 - MANTEQ</p>
-//   </footer>
-// );
+import { Header, Footer } from "../../index";
 
 const UserAdminPage = () => {
   const [users, setUsers] = useState(["User1", "User2", "User3"]);
