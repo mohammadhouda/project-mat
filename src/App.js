@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import LoginForm from './LoginForm';
-import AdminPage from './AdminPage';
-import UserPage from './UserPage';
-
+import {AdminPage, LoginForm, UserPage} from './components/index'
 const App = () => {
+
+  
     const [userType, setUserType] = useState('');
     
   
-    return(
-      <>
+    return (
+      <Fragment> 
         <Router>
           <Routes>
             <Route path = '/' element = {<LoginForm userType = {userType} setUserType = {setUserType}/>} />
@@ -18,10 +17,11 @@ const App = () => {
      
           </Routes>
         </Router>
-      </>
+        </Fragment>
   
-      
+ 
     )
   }
+
 
 export default App;

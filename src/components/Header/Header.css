@@ -1,0 +1,23 @@
+.header {
+  display: flex;
+  align-items: center;
+  background-color: rgb(136,182,205);
+  color: white;
+  padding: 15px;
+  height:50px;
+  justify-content: space-between;
+  border-radius: 10px;
+}
+.logo-admin {
+  height: 200%;
+  width:10%;
+  padding: 0;
+  margin-right: 15px;
+}
+
+.header-title {
+  flex-grow: 1;
+  text-align: center; 
+  margin-right: 170px;
+  color: black;
+}
