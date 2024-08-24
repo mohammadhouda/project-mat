@@ -1,14 +1,22 @@
-import React from 'react';
-import './TableRow.css'
-
+import React from "react";
+import "./TableRow.css";
 
 const TableRow = ({ row, index, onHoursChange }) => (
-  <tr>
+  <tr className="tr">
     <td>{row.project}</td>
     <td>{row.task}</td>
-    {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => (
+    {[
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday",
+    ].map((day) => (
       <td key={day}>
         <input
+          className="hours"
           type="number"
           value={row[day]}
           onChange={(e) => onHoursChange(index, day, e.target.value)}

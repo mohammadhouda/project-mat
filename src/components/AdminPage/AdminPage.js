@@ -1,28 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminPage.css";
 import { Header, Footer } from "../../index";
+import deleteIcon from "../../assets/icons/delete.png";
+import editIcon from "../../assets/icons/edit.png";
 
 const UserAdminPage = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isfinished, setFinished] = useState(false);
   const [formData, setFormData] = useState({
+    id: null,
     firstName: "",
     lastName: "",
     email: "",
     hourlyCost: 0,
   });
 
+  const [editingUser, setEditingUser] = useState(false);
+
   const addUser = () => {
-    const newUser = `User${users.length + 1}`;
-    setUsers([...users, newUser]);
+    setFormData({
+      id: null,
+      firstName: "",
+      lastName: "",
+      email: "",
+      hourlyCost: 0,
+    });
+    setEditingUser(false);
+    setShowForm(true);
   };
 
-  const isThereUser = users.length === 0;
+  const addMessage = () => {
+    setMessage("Action Done");
+    setTimeout(() => {
+      setMessage("");
+    }, 5000);
+  };
 
-  const deleteUser = () => {
-    setUsers(users.filter((user) => user !== selectedUser));
-    setSelectedUser(null);
+  const deleteUser = (id) => {
+    setUsers(users.filter((user) => user.id !== id));
     setShowForm(false);
   };
 
@@ -31,8 +49,17 @@ const UserAdminPage = () => {
     setShowForm(false);
   };
 
-  const handleEditClick = (e) => {
-    e.stopPropagation();
+  const handleEditClick = (id) => {
+    const userToEdit = users.find((user) => user.id === id);
+    setFormData({
+      id: userToEdit.id,
+      firstName: userToEdit.firstName,
+      lastName: userToEdit.lastName,
+      email: userToEdit.email,
+      hourlyCost: userToEdit.hourlyCost,
+    });
+    setSelectedUser(id);
+    setEditingUser(true);
     setShowForm(true);
   };
 
@@ -46,42 +73,87 @@ const UserAdminPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+    if (editingUser) {
+      setUsers(
+        users.map((user) => (user.id === selectedUser ? { ...formData } : user))
+      );
+      setFinished(true);
+    } else {
+      setUsers([...users, { ...formData, id: Date.now() }]);
+      setFinished(true);
+    }
+    setShowForm(false);
   };
+
+  useEffect(() => {
+    if (isfinished) {
+      addMessage();
+      setFinished(false);
+    }
+  }, [isfinished]);
 
   return (
     <div className="admin-container">
       <Header />
       <div className="admin-content">
         <div className="sidebar">
-          <div className={`user-list-box ${isThereUser ? "box" : ""}`}>
+          <div className={`user-list-box ${users.length === 0 ? "box" : ""}`}>
             <h3>Users</h3>
             <ul className="user-list">
-              {users.map((user, index) => (
+              {users.map((user) => (
                 <li
-                  key={index}
+                  data-id={user.id}
+                  key={user.id}
                   onClick={() => handleUserClick(user)}
-                  className={selectedUser === user ? "selected" : ""}
+                  className={selectedUser === user.id ? "editing" : ""}
                 >
-                  <span>{user}</span>
-                  {selectedUser === user && (
-                    <span className="edit-icon" onClick={handleEditClick}>
-                      ✏️
-                    </span>
-                  )}
+                  <span style={{ fontWeight: "bold" }}>
+                    {user.firstName} {user.lastName}
+                  </span>
+                  <div className="icons">
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditClick(user.id);
+                      }}
+                    >
+                      <img
+                        className="edit-icon"
+                        src={editIcon}
+                        alt="edit-icon"
+                      />
+                    </div>
+
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteUser(user.id);
+                      }}
+                    >
+                      <img
+                        className="delete-icon"
+                        src={deleteIcon}
+                        alt="delete-icon"
+                      />
+                    </div>
+                  </div>
                 </li>
               ))}
             </ul>
             <div className="icon-container">
-              <button onClick={addUser} className="icon-button">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addUser();
+                }}
+                className="icon-button"
+              >
                 +
-              </button>
-              <button onClick={deleteUser} className="icon-button">
-                -
               </button>
             </div>
           </div>
         </div>
+
         <div className="main-content">
           {showForm && (
             <form onSubmit={handleSubmit} className="user-form">
@@ -121,6 +193,8 @@ const UserAdminPage = () => {
               <div className="form-group">
                 <label htmlFor="hourlyCost">Hourly Cost:</label>
                 <input
+                  className="hour-cost"
+                  max={999}
                   type="number"
                   id="hourlyCost"
                   name="hourlyCost"
@@ -131,10 +205,13 @@ const UserAdminPage = () => {
                 />
               </div>
               <button type="submit" className="submit-button">
-                Save
+                {editingUser ? "Update" : "Add User"}
               </button>
             </form>
           )}
+          <span className={`pop-up ${message === "" ? "hidden" : ""}`}>
+            {message}
+          </span>
         </div>
       </div>
       <Footer />
