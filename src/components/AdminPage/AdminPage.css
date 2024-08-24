@@ -139,6 +139,15 @@ ul{
     justify-content: space-between;
     align-items: center;
     transition: 0.3s;
+    overflow: hidden;
+  }
+
+  .user-list-box li span {
+    font-weight: bold;
+    max-width: 150px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .user-list-box li:hover{
