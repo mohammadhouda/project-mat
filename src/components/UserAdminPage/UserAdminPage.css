@@ -1,88 +1,106 @@
-.header {
-  display: flex;
-  align-items: center;
+.user-table {
+  margin: 20px;
+}
+
+.table-container {
+  margin-bottom: 20px;
+}
+
+.user-table table th{
   background-color: rgba(21, 60, 106);
   color: white;
-  padding: 15px;
-  height: 50px;
-  justify-content: space-between;
-  border-radius: 10px;
-  position: relative;
 }
 
-.logo-admin {
-  height: 80%;
-  width: 10%;
-  padding: 0;
-  margin-right: 15px;
-}
 
-.header-title {
-  flex-grow: 1;
-  text-align: center;
-  margin-right: 170px;
-  color: white;
-}
-
-.user-info {
+.pagination-controls-container {
   display: flex;
   align-items: center;
+  justify-content: space-between; 
+  margin-bottom: 20px;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+}
+
+.pagination-controls button {
+  background-color: rgb(44, 93, 149);
   color: white;
-  position: relative;
-}
-
-.user-icon {
-  margin-right: 10px;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0 5px;
   cursor: pointer;
-  font-size: 22px;
 }
 
-.user-name {
-  font-size: 16px;
-  font-weight: 500;
+.pagination-controls button.active {
+  background-color: #1abc9c;
 }
 
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: #ffffff;
-  color: #333333;
-  border: 1px solid #dddddd;
-  border-radius: 6px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  min-width: 120px;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-.user-info:hover .dropdown-menu,
-.dropdown-menu.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-.dropdown-item {
-  display: block;
-  padding: 8px 12px;
-  text-align: left;
-  background-color: #ffffff;
-  color: #007bff;
-  text-decoration: none;
-  font-size: 14px;
+.add-user-button {
+  background-color: rgb(44, 93, 149);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  font-size: 24px;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.dropdown-item:hover {
-  background-color: #f5f5f5;
-  color: #0056b3;
+.add-user-button:hover {
+  background-color: #1abc9c;
 }
 
-.dropdown-item:focus {
-  outline: none;
-  background-color: #e0e0e0;
-  color: #0056b3;
+
+.user-form {
+  background-color: rgba(136,182,205, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; 
+}
+
+.user-form .form-group {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 10px; 
+}
+
+.user-form label {
+  width: 150px; 
+  margin: 0 10px 0 10px; 
+  font-weight: bold;
+}
+
+.user-form input, 
+.user-form select {
+  flex: 1; 
+  padding: 8px; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.user-form button.submit-button {
+  background-color: rgb(44, 93, 149);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px; 
+}
+
+.user-form button.submit-button:hover {
+  background-color: #1abc9c;
 }
