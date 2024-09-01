@@ -210,7 +210,7 @@ const UserAdminPage = () => {
               required
             />
           </div>
-          <button type="submit" className="submit-button">Submit</button>
+          <button type="submit" className="submit-button">Add user</button>
         </form>
       )}
     </div>

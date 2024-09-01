@@ -77,7 +77,8 @@ select:disabled, input[type="date"]:disabled {
 }
 
 table {
-  width: 100%;
+  max-width: 100%;
+  
   border-collapse: collapse;
 }
 

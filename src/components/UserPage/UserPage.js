@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './UserPage.css';
 import TableRow from '../TableRow/TableRow';
-import { Header, Footer } from '../index';
+
 
 const UserPage = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -157,7 +157,6 @@ const UserPage = () => {
 
   return (
     <React.Fragment>
-      <Header />
       <div className="container">
         {error && <div className="error-message">{error}</div>}
 
@@ -239,7 +238,7 @@ const UserPage = () => {
         </div>
       </div>
 
-      <Footer />
+
     </React.Fragment>
   );
 };

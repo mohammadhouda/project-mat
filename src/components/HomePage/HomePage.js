@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Header, Footer, UserAdminPage } from "../index";
-
+import { Header, Footer, UserAdminPage, UserPage } from "../index";
 import './HomePage.css';
 
 const HomePage = ({ userType, userName }) => {
@@ -10,6 +9,10 @@ const HomePage = ({ userType, userName }) => {
     if (selectedOption === 'Users') {
       return <UserAdminPage />;
     }
+    if (selectedOption === 'New Card' && userType === 'user') {
+      return <UserPage />;
+    }
+
     return <p>Select an option from the sidebar to view details.</p>;
   };
 
@@ -30,7 +33,7 @@ const HomePage = ({ userType, userName }) => {
               )}
               {userType === 'user' && (
                 <>
-                  <li><a href="#" onClick={() => setSelectedOption('User Dashboard')}>User Dashboard</a></li>
+                  <li><a href="#" onClick={() => setSelectedOption('New Card')}>New Card</a></li>
                   <li><a href="#" onClick={() => setSelectedOption('My Tasks')}>My Tasks</a></li>
                 </>
               )}
