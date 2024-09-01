@@ -1,31 +1,30 @@
-import React, { Fragment, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
-import { AdminPage, LoginForm, UserPage } from "./index";
+import React, { Fragment, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { UserAdminPage, LoginForm, UserPage, HomePage } from './components/index';
+
 const App = () => {
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState('');
+  const [userName, setUserName] = useState(''); 
 
   return (
     <Fragment>
       <Router>
         <Routes>
           <Route
-            path="/"
-            element={
-              <LoginForm userType={userType} setUserType={setUserType} />
-            }
+            path='/'
+            element={<LoginForm setUserType={setUserType} setUserName={setUserName} />}
           />
           <Route
-            path="/admin"
-            element={userType === "admin" ? <AdminPage /> : <Navigate to="/" />}
+            path='/admin'
+            element={userType === 'admin' ? <UserAdminPage /> : <Navigate to='/' />}
           />
           <Route
-            path="/user"
-            element={userType === "user" ? <UserPage /> : <Navigate to="/" />}
+            path='/user'
+            element={userType === 'user' ? <UserPage /> : <Navigate to='/' />}
+          />
+          <Route
+            path='/home'
+            element={userType ? <HomePage userType={userType} userName={userName} /> : <Navigate to='/' />}
           />
         </Routes>
       </Router>
@@ -34,3 +33,6 @@ const App = () => {
 };
 
 export default App;
+
+
+

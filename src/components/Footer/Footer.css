@@ -1,6 +1,8 @@
 .footer {
-    background-color: rgb(136,182,205);
+    background-color: rgba(21, 60, 106);;
     text-align: center;
     padding: 5px;
     margin-top: auto;
+    border-radius: 10px;
+    color: white;
   }

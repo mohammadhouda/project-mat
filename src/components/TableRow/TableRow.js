@@ -1,31 +1,20 @@
-import React from "react";
-import "./TableRow.css";
+import React from 'react';
+import './TableRow.css';
 
-const TableRow = ({ row, index, onHoursChange }) => (
-  <tr className="tr">
-    <td>{row.project}</td>
-    <td>{row.task}</td>
-    {[
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-      "sunday",
-    ].map((day) => (
-      <td key={day}>
-        <input
-          className="hours"
-          type="number"
-          value={row[day]}
-          onChange={(e) => onHoursChange(index, day, e.target.value)}
-          min="0"
-          step="0.5" // to allows decimal values
-        />
-      </td>
-    ))}
-  </tr>
-);
+const TableRow = ({ row, index, onHoursChange }) => {
+  return (
+    <tr>
+      <td>{row.project}</td>
+      <td>{row.task}</td>
+      <td><input type="number" value={row.monday || ''} onChange={(e) => onHoursChange(index, 'monday', e.target.value)} /></td>
+      <td><input type="number" value={row.tuesday || ''} onChange={(e) => onHoursChange(index, 'tuesday', e.target.value)} /></td>
+      <td><input type="number" value={row.wednesday || ''} onChange={(e) => onHoursChange(index, 'wednesday', e.target.value)} /></td>
+      <td><input type="number" value={row.thursday || ''} onChange={(e) => onHoursChange(index, 'thursday', e.target.value)} /></td>
+      <td><input type="number" value={row.friday || ''} onChange={(e) => onHoursChange(index, 'friday', e.target.value)} /></td>
+      <td><input type="number" value={row.saturday || ''} onChange={(e) => onHoursChange(index, 'saturday', e.target.value)} /></td>
+      <td><input type="number" value={row.sunday || ''} onChange={(e) => onHoursChange(index, 'sunday', e.target.value)} /></td>
+    </tr>
+  );
+};
 
 export default TableRow;
