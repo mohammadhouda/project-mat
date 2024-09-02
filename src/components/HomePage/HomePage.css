@@ -1,3 +1,9 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .homepage-container {
   display: flex;
   flex-direction: column;
@@ -17,10 +23,17 @@
   margin-bottom: 20px;
 }
 
+.default{
+  color: rgb(147, 142, 142);
+  font-weight: bold;
+  text-align: center;
+  
+}
+
 .homepage-content {
   display: flex;
   width: 100%;
-  max-width: 1200px;
+  max-width: 100%;
   flex-grow: 1;
 }
 

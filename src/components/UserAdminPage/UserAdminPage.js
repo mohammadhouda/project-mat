@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './UserAdminPage.css';
+import React, { useState, useEffect } from "react";
+import "./UserAdminPage.css";
 
 const UserAdminPage = () => {
   const [users, setUsers] = useState([]);
@@ -11,8 +11,8 @@ const UserAdminPage = () => {
     fullName: "",
     email: "",
     hourlyCost: 0,
-    password: "", 
-    confirmPassword: ""
+    password: "",
+    confirmPassword: "",
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -52,7 +52,7 @@ const UserAdminPage = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -64,29 +64,51 @@ const UserAdminPage = () => {
       fetch(`/mat/api/1.0/private/users`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: formData.email,
           cost: formData.hourlyCost,
           fullName: formData.fullName,
           role: "User",
-          password: formData.password 
-        })
+          password: formData.password,
+        }),
       })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           setUsers([...users, data]);
-          
+
           setShowForm(false);
         })
-        .catch(error => console.error("Error adding user:", error));
+        .catch((error) => console.error("Error adding user:", error));
     } else {
       console.error("No token found, please log in.");
     }
   };
 
+  // const handleDeleteUser = (userId) => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     fetch(`/mat/api/1.0/private/users/${userId}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         Accept: "*/*",
+  //       },
+  //     })
+  //       .then((response) => {
+  //         if (response.ok) {
+  //           setUsers(users.filter((user) => user.id !== userId));
+  //         } else {
+  //           console.error("Error deleting user:", response.statusText);
+  //         }
+  //       })
+  //       .catch((error) => console.error("Error deleting user:", error));
+  //   } else {
+  //     console.error("No token found, please log in.");
+  //   }
+  // };
 
   return (
     <div className="user-table">
@@ -124,7 +146,7 @@ const UserAdminPage = () => {
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
-                  className={currentPage === index + 1 ? 'active' : ''}
+                  className={currentPage === index + 1 ? "active" : ""}
                 >
                   {index + 1}
                 </button>
@@ -136,13 +158,16 @@ const UserAdminPage = () => {
                 Next
               </button>
             </div>
-            <button onClick={() => setShowForm(true)} className="add-user-button">
+            <button
+              onClick={() => setShowForm(true)}
+              className="add-user-button"
+            >
               +
             </button>
           </div>
         </>
       ) : (
-        <p>No users found.</p>
+        <p className="default">No users found.</p>
       )}
 
       {showForm && (
@@ -210,7 +235,9 @@ const UserAdminPage = () => {
               required
             />
           </div>
-          <button type="submit" className="submit-button">Add user</button>
+          <button type="submit" className="submit-button">
+            Add user
+          </button>
         </form>
       )}
     </div>

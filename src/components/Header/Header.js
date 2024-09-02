@@ -1,20 +1,19 @@
-import React, { useState, Fragment } from 'react';
-import logo2 from '../../assets/Images/logo2.png';
-import './Header.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, Fragment } from "react";
+import logo2 from "../../assets/Images/logo2.png";
+import "./Header.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Header = ({ userName }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => {
-    setShowDropdown(prev => !prev);
+    setShowDropdown((prev) => !prev);
   };
 
   const handleLogout = () => {
-   
-    localStorage.removeItem('token');
-    window.location.href = '/';
+    localStorage.removeItem("token");
+    window.location.href = "/";
   };
 
   return (
@@ -27,7 +26,13 @@ const Header = ({ userName }) => {
           <span className="user-name">{userName || "User"}</span>
           {showDropdown && (
             <div className="dropdown-menu">
-              <a href="#logout" className="dropdown-item" onClick={handleLogout}>Logout</a>
+              <a
+                href="#logout"
+                className="dropdown-item"
+                onClick={handleLogout}
+              >
+                Logout
+              </a>
             </div>
           )}
         </div>

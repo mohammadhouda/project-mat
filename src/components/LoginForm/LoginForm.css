@@ -35,6 +35,23 @@ body{
   height: auto;
 }
 
+.message{
+  background-color: rgba(255, 31, 31, 0.627);
+  border-radius: 5px;
+  display: none;
+}
+
+.message.show{
+  display: block;
+}
+
+.message p{
+  text-align: center;
+  padding: 7px 0;
+  font-weight: bold;
+  
+}
+
 .input-group {
   display: flex;
   align-items: center;

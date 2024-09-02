@@ -78,8 +78,9 @@ select:disabled, input[type="date"]:disabled {
 
 table {
   max-width: 100%;
-  
+  width: 100%;
   border-collapse: collapse;
+  margin-bottom: 50px;
 }
 
 th, td {
