@@ -1,6 +1,7 @@
+import { jwtDecode } from 'jwt-decode';
+import TableRow from '../TableRow/TableRow';
 import React, { useEffect, useState } from 'react';
 import './UserPage.css';
-import TableRow from '../TableRow/TableRow';
 
 
 const UserPage = () => {
@@ -12,35 +13,57 @@ const UserPage = () => {
   const [tableData, setTableData] = useState([]);
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState('');
+  const [comment, setComment] = useState('');
+  const [userEmail, setUserEmail] = useState('');
 
-  
-  const formatDate = (date) => {
-    const day = date.getDate();
-    const month = date.getMonth() + 1; 
-    const year = date.getFullYear();
-    return `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month}-${year}`;
+  const decodeToken = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      console.log('Decoded Token:', decoded);
+      return decoded.sub; 
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
   };
+  
 
  
-  const getWeekDates = (date) => {
-    const start = new Date(date);
-    const day = start.getDay();
-    const diff = start.getDate() - day + (day === 0 ? -6 : 1); 
-    const startOfWeek = new Date(start.setDate(diff));
-    const weekDates = [];
+  const formatDate = (date) => {
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1;
+    const year = date.getUTCFullYear();
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+    const seconds = date.getUTCSeconds();
+    const milliseconds = date.getUTCMilliseconds();
+    return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}T${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}.${milliseconds < 100 ? (milliseconds < 10 ? '00' + milliseconds : '0' + milliseconds) : milliseconds}Z`;
+  };
+
+  const getWeekDates = (startDate) => {
+    const start = new Date(startDate);
+    const startOfWeek = new Date(start);
+    startOfWeek.setDate(start.getDate() - start.getDay() + 1); 
+
+    const dates = [];
     for (let i = 0; i < 7; i++) {
-      const day = new Date(startOfWeek);
-      day.setDate(startOfWeek.getDate() + i);
-      weekDates.push(formatDate(day));
+      const date = new Date(startOfWeek);
+      date.setDate(startOfWeek.getDate() + i);
+      dates.push(formatDate(date)); 
     }
-    return weekDates;
+
+    return {
+      dateFrom: dates[0],
+      dateTo: dates[dates.length - 1],
+      dates: dates
+    };
   };
 
   const handleDateChange = (event) => {
-    const date = event.target.value;
-    setSelectedDate(date);
-    setFixedDates(getWeekDates(date)); 
-    setSelectedProject(''); 
+    const date = new Date(event.target.value);
+    setSelectedDate(formatDate(date));
+    setFixedDates(getWeekDates(event.target.value));
+    setSelectedProject('');
     setAvailableTasks([]);
     setSelectedTask('');
   };
@@ -61,44 +84,46 @@ const UserPage = () => {
       const response = await fetch(`/mat/api/1.0/private/projects/${encodeURIComponent(project)}/tasks`, {
         method: 'GET',
         headers: {
-          'Accept': '*/*',
+          'Accept': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorText = await response.text();
+        throw new Error(`Network response was not ok: ${errorText}`);
       }
 
       const data = await response.json();
       setAvailableTasks(data);
     } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
-      setError('Failed to fetch tasks for the selected project');
+      setError('Failed to fetch tasks for the selected project. ' + error.message);
     }
   };
 
   const handleTaskChange = (event) => {
-    setSelectedTask(event.target.value);
+    const task = event.target.value;
+    setSelectedTask(task);
   };
 
   const handleAddClick = () => {
     if (selectedDate && selectedProject && selectedTask) {
-      setTableData([
-        ...tableData,
-        {
-          project: selectedProject,
-          task: selectedTask,
-          monday: fixedDates[0],
-          tuesday: fixedDates[1],
-          wednesday: fixedDates[2],
-          thursday: fixedDates[3],
-          friday: fixedDates[4],
-          saturday: fixedDates[5],
-          sunday: fixedDates[6],
-        },
-      ]);
+      const taskId = availableTasks.find(task => task.name === selectedTask)?.id;
 
+      const newRow = {
+        project: selectedProject,
+        task: selectedTask,
+        taskId: taskId,
+        monday: 0,
+        tuesday: 0,
+        wednesday: 0,
+        thursday: 0,
+        friday: 0,
+        saturday: 0,
+        sunday: 0,
+      };
+
+      setTableData([...tableData, newRow]);
       setSelectedProject('');
       setAvailableTasks([]);
       setSelectedTask('');
@@ -109,19 +134,98 @@ const UserPage = () => {
 
   const handleHoursChange = (index, day, value) => {
     const newTableData = [...tableData];
-    newTableData[index][day] = value;
+    const parsedValue = parseFloat(value) || 0;
+    newTableData[index][day] = parsedValue;
     setTableData(newTableData);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (tableData.length === 0) {
       alert('The table is empty. Please add data before submitting.');
       return;
     }
-
-    console.log('Table Data:', tableData);
-    alert('Data submitted!');
+  
+    if (!userEmail) {
+      alert('User email is not set. Please try reloading the page.');
+      return;
+    }
+  
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('No authentication token found.');
+      return;
+    }
+  
+    const weekDates = getWeekDates(selectedDate);
+  
+    const requestBody = {
+      userId: userEmail,
+      dateFrom: weekDates.dateFrom,
+      dateTo: weekDates.dateTo,
+      msg: comment,
+      activities: tableData.map(row => {
+        return {
+          taskId: row.taskId,
+          date: row.date,
+          duration: row.duration
+        };
+      }),
+    };
+  
+    console.log('Request Headers:', {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+  
+    console.log('Request Body:', requestBody);
+  
+    try {
+      const response = await fetch(`/mat/api/1.0/private/reports`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+  
+      console.log('Response Status:', response.status);
+      console.log('Response Headers:', response.headers);
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error Response Status:', response.status);
+        console.error('Error Response Text:', errorText);
+        setError(`Failed to submit data. Status: ${response.status}, Error: ${errorText}`);
+        return;
+      }
+  
+      const result = await response.json();
+      console.log('Response Data:', result);
+      alert('Data submitted successfully!');
+    } catch (error) {
+      console.error('Error posting report:', error);
+      setError(`An error occurred while submitting the data: ${error.message}`);
+    }
   };
+  
+  
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const userId = decodeToken(token);
+      if (userId) {
+        setUserEmail(userId); 
+      } else {
+        setError('Failed to decode token or userId not found.');
+      }
+    } else {
+      setError('No authentication token found.');
+    }
+  }, []);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -132,28 +236,30 @@ const UserPage = () => {
       }
 
       try {
-        const response = await fetch(`/mat/api/1.0/private/projects`, {
+        const response = await fetch('/mat/api/1.0/private/projects', {
           method: 'GET',
           headers: {
-            'Accept': '*/*',
+            'Accept': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
         });
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          const errorText = await response.text(); 
+          throw new Error(`Network response was not ok: ${errorText}`);
         }
 
         const data = await response.json();
         setProjects(data);
       } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        setError('Failed to fetch projects');
+        setError('Failed to fetch projects. ' + error.message);
       }
     };
 
     fetchProjects();
   }, []);
+
+  
 
   return (
     <React.Fragment>
@@ -164,9 +270,8 @@ const UserPage = () => {
           <label>Date</label>
           <input
             type="date"
-            value={selectedDate}
+            value={selectedDate.split('T')[0]} 
             onChange={handleDateChange}
-            disabled={selectedDate !== ''} 
           />
         </div>
 
@@ -212,11 +317,8 @@ const UserPage = () => {
               <tr>
                 <th>Project</th>
                 <th>Task</th>
-                {fixedDates.map((date, index) => (
-                  <th key={index}>
-                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][index]}<br />
-                    {date}
-                  </th>
+                {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
+                  <th key={index}>{day}</th>
                 ))}
               </tr>
             </thead>
@@ -233,12 +335,19 @@ const UserPage = () => {
           </table>
         </div>
 
-        <div className="submit-container">
-          <button className="submit-button" onClick={handleSubmit}>Submit</button>
+        <div className="comment-section">
+          <label>Comment</label>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            rows="4"
+          />
+        </div>
+
+        <div className="button-container">
+          <button onClick={handleSubmit}>Submit</button>
         </div>
       </div>
-
-
     </React.Fragment>
   );
 };
