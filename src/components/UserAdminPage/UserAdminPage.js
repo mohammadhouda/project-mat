@@ -235,6 +235,7 @@ const UserAdminPage = () => {
               required
             />
           </div>
+          <input type="text" placeholder="comment" />
           <button type="submit" className="submit-button">
             Add user
           </button>
